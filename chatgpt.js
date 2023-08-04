@@ -1,4 +1,4 @@
-(function(Scratch) {
+(function (Scratch) {
   'use strict';
   let cache = {};
   let conf = {
@@ -14,7 +14,7 @@
     'text-davinci-002',
     'text-curie-001',
     'text-babbage-001',
-    'text-ada-001'
+    'text-ada-001',
   ];
   const chat_completions = [
     'gpt-3.5-turbo-0301',
@@ -22,11 +22,76 @@
     'gpt-4-32k-0314',
     'gpt-4-32k',
     'gpt-4-0314',
-    'gpt-4'
+    'gpt-4',
   ];
   const all_completions = [...completions, ...chat_completions];
 
-  // ... (existing code)
+  async function request_completions() {
+    // see https://platform.openai.com/docs/api-reference/completions/create
+    const resp = await Scratch.fetch(`https://api.openai.com/v1/completions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${conf.apikey}`,
+      },
+      body: JSON.stringify({
+        model: conf.model,
+        prompt: prompt,
+        max_tokens: conf.token,
+        temperature: conf.temp / 100,
+      }),
+    });
+    if (!resp.ok) throw new Error((await resp.json()).message);
+    return (await resp.json()).choices[0].text;
+  }
+
+  async function request_chat(text) {
+    // see https://platform.openai.com/docs/api-reference/chat/create
+    const resp = await Scratch.fetch(
+      `https://api.openai.com/v1/chat/completions`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${conf.apikey}`,
+        },
+        body: JSON.stringify({
+          model: conf.model,
+          messages: [
+            {
+              role: 'user',
+              content: text,
+            },
+          ],
+          max_tokens: conf.token,
+          temperature: conf.temp / 100,
+        }),
+      }
+    );
+    if (!resp.ok) throw new Error((await resp.json()).message);
+    return (await resp.json()).choices[0].message.content;
+  }
+
+  async function request(text) {
+    if (!conf.apikey) {
+      const resp = await Scratch.fetch('https://chatgpt.deeptrain.net/gpt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: text }),
+      });
+      if (!resp.ok)
+        throw new Error('Request failed! Please check your network!');
+      const message = (await resp.json()).message;
+      cache[text] = message;
+      return message;
+    } else {
+      if (!all_completions.includes(conf.model))
+        throw new Error('Invalid model!');
+      return completions.includes(conf.model)
+        ? await request_completions()
+        : await request_chat(text);
+    }
+  }
 
   class ChatGPT {
     getInfo() {
@@ -42,8 +107,8 @@
             arguments: {
               text: {
                 type: Scratch.ArgumentType.STRING,
-                defaultValue: 'hi'
-              }
+                defaultValue: 'hi',
+              },
             },
             disableMonitor: true,
           },
@@ -55,20 +120,37 @@
           {
             opcode: 'customize',
             blockType: Scratch.BlockType.COMMAND,
-            text: 'customize the apikey [apikey] model [model] max tokens [token] temperature [temp] (0-100) (risky)',
+            text:
+              'customize the apikey [apikey] model [model] max tokens [token] temperature [temp] (0-100) (risky)',
             arguments: {
-              // ... (existing code)
+              apikey: {
+                type: Scratch.ArgumentType.STRING,
+                defaultValue: 'sk-',
+              },
+              model: {
+                type: Scratch.ArgumentType.STRING,
+                defaultValue: 'text-davinci-003',
+                menu: 'models',
+              },
+              token: {
+                type: Scratch.ArgumentType.NUMBER,
+                defaultValue: 128,
+              },
+              temp: {
+                type: Scratch.ArgumentType.NUMBER,
+                defaultValue: 70,
+              },
             },
           },
           {
             func: 'donate',
             blockType: Scratch.BlockType.BUTTON,
-            text: 'donate'
+            text: 'donate',
           },
         ],
         menus: {
           models: all_completions,
-        }
+        },
       };
     }
 
@@ -90,7 +172,10 @@
     }
 
     customize(args) {
-      conf = args;
+      conf.apikey = args.apikey; // Update apikey
+      conf.model = args.model; // Update model
+      conf.token = args.token; // Update token
+      conf.temp = args.temp; // Update temp
       return 'The openai apikey has been set. Note that customizing the apikey is risky!';
     }
 
