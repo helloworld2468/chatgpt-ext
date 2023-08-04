@@ -103,7 +103,7 @@
           {
             opcode: 'ask',
             blockType: Scratch.BlockType.REPORTER,
-            text: 'ask chatgpt [text]',
+            text: 'Ask ChatGPT [text]',
             arguments: {
               text: {
                 type: Scratch.ArgumentType.STRING,
@@ -120,7 +120,7 @@
           {
             opcode: 'customize',
             blockType: Scratch.BlockType.COMMAND,
-            text: 'customize the apikey [apikey] model [model] max tokens [token] temperature [temp] (0-100) (risky)',
+            text: 'Customize the apikey [apikey] Model [model] Max tokens [token] Temperature [temp] (0-100) (risky)',
             arguments: {
               apikey: {
                 type: Scratch.ArgumentType.STRING,
@@ -144,7 +144,12 @@
           {
             func: 'donate',
             blockType: Scratch.BlockType.BUTTON,
-            text: 'donate',
+            text: 'Donate',
+          },
+          {
+            func: 'visitrep',
+            blockType: Scratch.BlockType.BUTTON,
+            text: 'Visit the repository of this amazing extension',
           },
         ],
         menus: {
@@ -180,6 +185,9 @@
 
     donate() {
       Scratch.openWindow('https://afdian.net/@zmh-program');
+    }
+    visitrep() {
+      Scratch.openWindow('https://github.com/helloworld2468/chatgpt-ext/edit/main/chatgpt.js');
     }
   }
 
