@@ -141,8 +141,9 @@
                 defaultValue: 70,
               },
               custom: {
-                type: Scratch.ArgumentType.BOOLEAN,
-                defaultValue: true,
+                type: Scratch.ArgumentType.STRING,
+                menu: 'customKeys',
+                defaultValue: 'custom',
               },
             },
           },
@@ -154,6 +155,7 @@
         ],
         menus: {
           models: all_completions,
+          customKeys: ['custom', 'default'], // Custom menu for customKeys argument
         },
       };
     }
@@ -176,7 +178,7 @@
     }
 
     customize(args) {
-      if (args.custom) {
+      if (args.custom === 'custom') {
         conf.apikey = args.apikey; // Update apikey
       } else {
         conf.apikey = ''; // Reset to the default API key
