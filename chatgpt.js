@@ -118,9 +118,9 @@
             text: 'ChatGPT answer',
           },
           {
-            opcode: 'customize',
+            opcode: 'customize_apikey',
             blockType: Scratch.BlockType.COMMAND,
-            text: 'customize the model [model] max tokens [token] temperature [temp] (0-100) (risky) use custom api key [custom]',
+            text: 'customize the model [model] max tokens [token] temperature [temp] (0-100) (risky) use custom api key [apikey]',
             arguments: {
               model: {
                 type: Scratch.ArgumentType.STRING,
@@ -135,15 +135,30 @@
                 type: Scratch.ArgumentType.NUMBER,
                 defaultValue: 70,
               },
-              custom: {
-                type: Scratch.ArgumentType.BOOLEAN,
-                defaultValue: true,
-                menu: 'customOption',
-              },
               apikey: {
                 type: Scratch.ArgumentType.STRING,
                 defaultValue: 'sk-', // Default value remains 'sk-' so it shows the text box when custom is true
-                visible: 'custom==true', // Show this argument only when custom is true
+                visible: true,
+              },
+            },
+          },
+          {
+            opcode: 'customize_default_apikey',
+            blockType: Scratch.BlockType.COMMAND,
+            text: 'customize the model [model] max tokens [token] temperature [temp] (0-100) (risky) use default api key',
+            arguments: {
+              model: {
+                type: Scratch.ArgumentType.STRING,
+                defaultValue: 'text-davinci-003',
+                menu: 'models',
+              },
+              token: {
+                type: Scratch.ArgumentType.NUMBER,
+                defaultValue: 128,
+              },
+              temp: {
+                type: Scratch.ArgumentType.NUMBER,
+                defaultValue: 70,
               },
             },
           },
@@ -155,7 +170,6 @@
         ],
         menus: {
           models: all_completions,
-          customOption: ['true', 'false'], // Custom menu for custom boolean
         },
       };
     }
@@ -177,13 +191,20 @@
       return lastAnswer; // Return the last stored answer
     }
 
-    customize(args) {
-      const isCustom = args.custom === 'true';
-      conf.apikey = isCustom ? args.apikey : ''; // Set the apikey based on custom selection
+    customize_apikey(args) {
+      conf.apikey = args.apikey; // Update apikey
       conf.model = args.model; // Update model
       conf.token = args.token; // Update token
       conf.temp = args.temp; // Update temp
-      return 'The OpenAI apikey has been set. Note that customizing the apikey is risky!';
+      return 'The custom OpenAI apikey has been set. Note that customizing the apikey is risky!';
+    }
+
+    customize_default_apikey(args) {
+      conf.apikey = ''; // Reset to the default API key
+      conf.model = args.model; // Update model
+      conf.token = args.token; // Update token
+      conf.temp = args.temp; // Update temp
+      return 'The default OpenAI apikey has been set.';
     }
 
     donate() {
