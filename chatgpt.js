@@ -179,11 +179,7 @@
 
     customize(args) {
       const isCustom = args.custom === 'true';
-      if (isCustom) {
-        conf.apikey = args.apikey; // Update apikey
-      } else {
-        conf.apikey = ''; // Reset to the default API key
-      }
+      conf.apikey = isCustom ? args.apikey : ''; // Set the apikey based on custom selection
       conf.model = args.model; // Update model
       conf.token = args.token; // Update token
       conf.temp = args.temp; // Update temp
