@@ -120,13 +120,8 @@
           {
             opcode: 'customize',
             blockType: Scratch.BlockType.COMMAND,
-            text:
-              'customize the apikey [apikey] model [model] max tokens [token] temperature [temp] (0-100) (risky) use custom api key [custom]',
+            text: 'customize the model [model] max tokens [token] temperature [temp] (0-100) (risky) use custom api key [custom] apikey [apikey]',
             arguments: {
-              apikey: {
-                type: Scratch.ArgumentType.STRING,
-                defaultValue: 'sk-',
-              },
               model: {
                 type: Scratch.ArgumentType.STRING,
                 defaultValue: 'text-davinci-003',
@@ -143,7 +138,12 @@
               custom: {
                 type: Scratch.ArgumentType.BOOLEAN,
                 defaultValue: true,
-                menu: 'customOption', // Custom menu for custom boolean
+                menu: 'customOption',
+              },
+              apikey: {
+                type: Scratch.ArgumentType.STRING,
+                defaultValue: 'sk-',
+                condition: 'custom', // Show this argument only when custom is true
               },
             },
           },
