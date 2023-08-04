@@ -187,7 +187,7 @@
       Scratch.openWindow('https://afdian.net/@zmh-program');
     }
     visitrep() {
-      Scratch.openWindow('https://github.com/helloworld2468/chatgpt-ext/edit/main/chatgpt.js');
+      Scratch.openWindow('https://github.com/helloworld2468/chatgpt-ext');
     }
   }
 
