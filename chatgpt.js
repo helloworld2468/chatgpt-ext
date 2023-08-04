@@ -145,7 +145,7 @@
           {
             opcode: 'customize_default_apikey',
             blockType: Scratch.BlockType.COMMAND,
-            text: 'customize the model [model] max tokens [token] temperature [temp] (0-100) (risky) use default api key',
+            text: 'customize the model [model] max tokens [token] temperature [temp] (0-100) (risky) uses default api key',
             arguments: {
               model: {
                 type: Scratch.ArgumentType.STRING,
