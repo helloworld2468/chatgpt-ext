@@ -142,8 +142,8 @@
               },
               apikey: {
                 type: Scratch.ArgumentType.STRING,
-                defaultValue: 'sk-',
-                visible: true, // Show this argument by default
+                defaultValue: 'sk-', // Default value remains 'sk-' so it shows the text box when custom is true
+                visible: 'custom==true', // Show this argument only when custom is true
               },
             },
           },
