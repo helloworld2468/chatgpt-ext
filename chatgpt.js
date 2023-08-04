@@ -121,7 +121,7 @@
             opcode: 'customize',
             blockType: Scratch.BlockType.COMMAND,
             text:
-              'customize the apikey [apikey] model [model] max tokens [token] temperature [temp] (0-100) (risky)',
+              'customize the apikey [apikey] model [model] max tokens [token] temperature [temp] (0-100) (risky) use custom api key [custom]',
             arguments: {
               apikey: {
                 type: Scratch.ArgumentType.STRING,
@@ -139,6 +139,10 @@
               temp: {
                 type: Scratch.ArgumentType.NUMBER,
                 defaultValue: 70,
+              },
+              custom: {
+                type: Scratch.ArgumentType.BOOLEAN,
+                defaultValue: true,
               },
             },
           },
@@ -172,7 +176,11 @@
     }
 
     customize(args) {
-      conf.apikey = args.apikey; // Update apikey
+      if (args.custom) {
+        conf.apikey = args.apikey; // Update apikey
+      } else {
+        conf.apikey = ''; // Reset to the default API key
+      }
       conf.model = args.model; // Update model
       conf.token = args.token; // Update token
       conf.temp = args.temp; // Update temp
