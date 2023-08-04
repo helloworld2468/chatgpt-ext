@@ -143,7 +143,7 @@
               apikey: {
                 type: Scratch.ArgumentType.STRING,
                 defaultValue: 'sk-',
-                condition: 'custom', // Show this argument only when custom is true
+                condition: 'custom==true', // Show this argument only when custom is true
               },
             },
           },
@@ -187,7 +187,7 @@
       conf.model = args.model; // Update model
       conf.token = args.token; // Update token
       conf.temp = args.temp; // Update temp
-      return 'The openai apikey has been set. Note that customizing the apikey is risky!';
+      return 'The OpenAI apikey has been set. Note that customizing the apikey is risky!';
     }
 
     donate() {
