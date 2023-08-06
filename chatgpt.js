@@ -120,7 +120,7 @@
           {
             opcode: 'customize',
             blockType: Scratch.BlockType.COMMAND,
-            text: 'Customize the apikey [apikey] Model [model] Max tokens [token] Temperature [temp] (0-100) (risky)',
+            text: 'Customize the API key [apikey] Model [model] Max tokens [token] Temperature [temp] (0-100) (risky)',
             arguments: {
               apikey: {
                 type: Scratch.ArgumentType.STRING,
