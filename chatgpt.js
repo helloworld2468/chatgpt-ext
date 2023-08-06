@@ -115,7 +115,7 @@
           {
             opcode: 'answer',
             blockType: Scratch.BlockType.REPORTER, // New reporter block
-            text: 'ChatGPT answer',
+            text: 'ChatGPT response',
           },
           {
             opcode: 'customize',
